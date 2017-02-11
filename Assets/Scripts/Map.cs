@@ -4,44 +4,70 @@ using System.Collections;
 public class Map : MonoBehaviour {
 
     public GameObject hexPrefab;
+    TerrainGenerator terrainGen;
     public int width;
     public int height;
 
     float xEvenOffset;
-    float xOddOffset;
-
     float yEvenOffset;
-    float yOddOffset;
-    float skin = .3f;
 
-    float xOffset;
-    float yOffset;
+    GameObject[,] hexGrid;
+    int[,] pathGrid;
+
     // Use this for initialization
     void Start ()
     {
+        // Initialize path and hex grids
+        hexGrid = new GameObject[width, height];
+        pathGrid = new int[width, height];
 
+        // Get procedural terrain generator
+        terrainGen = GetComponentInChildren<TerrainGenerator>();
+
+        // Initialize values of offset from grid integer coordinates to world coordinates
         xEvenOffset = Mathf.Sqrt(3) / 2;
-        xOddOffset = xEvenOffset;
         yEvenOffset = 3/4f;
-        yOddOffset = yEvenOffset;
+
 	    for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                float xPos = x * xEvenOffset;
-                float yPos = y * yEvenOffset;
-                if (y % 2 == 1)
-                {
-                    xPos += xEvenOffset/2f;
-                    //yPos = yOddOffset;
-                }
-                GameObject newHex = (GameObject)Instantiate(hexPrefab, new Vector3(xPos, 0, yPos), Quaternion.identity);
+                
+                hexGrid[x,y] = createHex(x, y, xEvenOffset, yEvenOffset);
             }
         }
-	}
+        
+        // Get the terrain grid map
+        pathGrid = terrainGen.GenerateMap();
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                SpriteRenderer sr = hexGrid[x, y].GetComponentInChildren<SpriteRenderer>();
+                sr.material.color = (pathGrid[x,y] == 0)?Color.white:Color.gray;
+            }
+        }
+    }
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    GameObject createHex(int x, int y, float worldXOffset, float worldYOffset)
+    {
+        //from grid coords to world
+        float xPos = x * xEvenOffset;
+        float yPos = y * yEvenOffset;
+        if (y % 2 == 1)
+        {
+            //on even rows, x offset is an additional half of x offset
+            xPos += xEvenOffset / 2f;
+        }
+        Vector3 worldPos = new Vector3(xPos, 0, yPos);
+        GameObject newHex = (GameObject)Instantiate(hexPrefab, worldPos, Quaternion.identity);
+
+        //pass in  grid coordinates and world coordinates (latter not necessary I suppose considering transform)
+        newHex.GetComponent<HexManager>().Initialize(x, y, worldPos);
+
+        //rename hex
+        newHex.name = "Hex_" + x.ToString().PadLeft(2,'0') + "_" + y.ToString().PadLeft(2, '0');
+        newHex.transform.SetParent(this.transform);
+        return newHex;
+    }
 }
