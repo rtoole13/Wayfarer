@@ -8,15 +8,22 @@ public class Map : MonoBehaviour {
     public int height;
 
     float xEvenOffset;
-    float yEvenOffset;
+    float xOddOffset;
 
+    float yEvenOffset;
+    float yOddOffset;
+    float skin = .3f;
+
+    float xOffset;
+    float yOffset;
     // Use this for initialization
     void Start ()
     {
 
         xEvenOffset = Mathf.Sqrt(3) / 2;
+        xOddOffset = xEvenOffset;
         yEvenOffset = 3/4f;
-
+        yOddOffset = yEvenOffset;
 	    for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -26,15 +33,9 @@ public class Map : MonoBehaviour {
                 if (y % 2 == 1)
                 {
                     xPos += xEvenOffset/2f;
+                    //yPos = yOddOffset;
                 }
                 GameObject newHex = (GameObject)Instantiate(hexPrefab, new Vector3(xPos, 0, yPos), Quaternion.identity);
-
-                //rename hex
-                newHex.name = "Hex_" + x + "_" + y;
-
-                //set Map as parent
-                newHex.transform.SetParent(this.transform);
-
             }
         }
 	}
