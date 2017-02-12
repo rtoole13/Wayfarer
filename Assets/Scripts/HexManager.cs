@@ -10,7 +10,7 @@ public class HexManager : MonoBehaviour {
     public Vector3 worldPosition;
 
     [HideInInspector]
-    public bool walkable = false;
+    public bool walkable = true;
 	
     public void Initialize(int _gridX, int _gridY, Vector3 _worldPosition)
     {
