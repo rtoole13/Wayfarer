@@ -23,6 +23,7 @@ public class Map : MonoBehaviour {
 
         // Get procedural terrain generator
         terrainGen = GetComponentInChildren<TerrainGenerator>();
+        terrainGen.Initialize();
 
         // Initialize values of offset from grid integer coordinates to world coordinates
         xEvenOffset = Mathf.Sqrt(3) / 2;
@@ -39,12 +40,13 @@ public class Map : MonoBehaviour {
         
         // Get the terrain grid map
         pathGrid = terrainGen.GenerateMap();
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 SpriteRenderer sr = hexGrid[x, y].GetComponentInChildren<SpriteRenderer>();
-                sr.material.color = (pathGrid[x,y] == 0)?Color.white:Color.gray;
+                sr.color = (pathGrid[x, y] == 0) ? Color.white : Color.gray;
             }
         }
     }

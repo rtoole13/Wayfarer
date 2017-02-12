@@ -18,21 +18,26 @@ public class TerrainGenerator : MonoBehaviour {
 
     void Start()
     {
+        
+        
+    }
+    public void Initialize()
+    {
         // Get map component. Set local w/h to that of map
         map = GetComponentInChildren<Map>();
         width = map.width;
         height = map.height;
-        localGrid = new int[width, height];
     }
-
     public int[,] GenerateMap()
     {
+        localGrid = new int[width, height];
         RandomFillMap();
         return localGrid;
     }
 
     void RandomFillMap()
     {
+        
         if (useRandomSeed)
         {
             seed = Time.time.ToString();
