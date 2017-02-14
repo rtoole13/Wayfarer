@@ -37,24 +37,20 @@ public class Map : MonoBehaviour {
                 hexGrid[x,y] = createHex(x, y, xEvenOffset, yEvenOffset);
             }
         }
-        
-        // Get the terrain grid map
-        pathGrid = terrainGen.GenerateMap();
 
-        // Color terrain and label hex unwalkable
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                if (pathGrid[x,y] == 1)
-                {
-                    hexGrid[x, y].GetComponent<HexManager>().walkable = false;
-                    hexGrid[x, y].GetComponentInChildren<SpriteRenderer>().color = Color.gray;
-                }
-            }
-        }
+        //Call on the terrain generator and update the hex colors
+        GenerateNewTerrain();
+        
     }
 	
+    void Update()
+    {
+        //Cycle through generating of maps on click
+        if (Input.GetMouseButtonDown(0))
+        {
+            GenerateNewTerrain();
+        }
+    }
     GameObject createHex(int x, int y, float worldXOffset, float worldYOffset)
     {
         //from grid coords to world
@@ -75,5 +71,30 @@ public class Map : MonoBehaviour {
         newHex.name = "Hex_" + x.ToString().PadLeft(2,'0') + "_" + y.ToString().PadLeft(2, '0');
         newHex.transform.SetParent(this.transform);
         return newHex;
+    }
+    void GenerateNewTerrain()
+    {
+        // Get the terrain grid map
+        pathGrid = terrainGen.GenerateMap();
+
+        // Color terrain and label hex unwalkable
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                HexManager hm = hexGrid[x, y].GetComponent<HexManager>();
+                SpriteRenderer sr = hexGrid[x, y].GetComponentInChildren<SpriteRenderer>();
+                if (pathGrid[x, y] == 1)
+                {
+                    hm.walkable = false;
+                    sr.color = Color.gray;
+                }
+                else
+                {
+                    hm.walkable = true;
+                    sr.color = Color.white;
+                }
+            }
+        }
     }
 }

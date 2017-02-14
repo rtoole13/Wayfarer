@@ -17,11 +17,6 @@ public class TerrainGenerator : MonoBehaviour {
     public int smoothing;
     int[,] localGrid;
 
-    void Start()
-    {
-        
-        
-    }
     public void Initialize()
     {
         // Get map component. Set local w/h to that of map
@@ -90,7 +85,6 @@ public class TerrainGenerator : MonoBehaviour {
                 {
                     localGrid[x, y] = (pseudoRandom.Next(0, 100) < randomFillPercentage) ? 1 : 0;
                 }
-                
             }
         }
 
