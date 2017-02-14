@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Map : MonoBehaviour {
 
+    public GameObject unit;
     public GameObject hexPrefab;
     TerrainGenerator terrainGen;
     public int width;
@@ -83,18 +84,25 @@ public class Map : MonoBehaviour {
             for (int y = 0; y < height; y++)
             {
                 HexManager hm = hexGrid[x, y].GetComponent<HexManager>();
-                SpriteRenderer sr = hexGrid[x, y].GetComponentInChildren<SpriteRenderer>();
+                MeshRenderer mr = hexGrid[x, y].GetComponentInChildren<MeshRenderer>();
                 if (pathGrid[x, y] == 1)
                 {
                     hm.walkable = false;
-                    sr.color = Color.gray;
+                    mr.material.color = Color.gray;
                 }
                 else
                 {
                     hm.walkable = true;
-                    sr.color = Color.white;
+                    mr.material.color = Color.white;
                 }
             }
         }
     }
+    /*
+    public GameObject HexFromWorldPosition()
+    {
+
+        return;
+    }
+    */
 }
