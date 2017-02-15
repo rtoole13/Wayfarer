@@ -4,7 +4,6 @@ using System.Collections;
 
 public class TerrainGenerator : MonoBehaviour {
 
-    Map map;
     int width;
     int height;
 
@@ -17,12 +16,11 @@ public class TerrainGenerator : MonoBehaviour {
     public int smoothing;
     int[,] localGrid;
 
-    public void Initialize()
+    public void Initialize(int _width, int _height)
     {
-        // Get map component. Set local w/h to that of map
-        map = GetComponentInChildren<Map>();
-        width = map.width;
-        height = map.height;
+        //Set local w/h to that of map
+        width = _width;
+        height = _height;
     }
     public int[,] GenerateMap()
     {

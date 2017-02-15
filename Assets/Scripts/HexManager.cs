@@ -1,30 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class HexManager : MonoBehaviour {
 
+    //FIX ME: hide in inspector blegh.
     [HideInInspector]
-    public int gridX, gridY;
-
-    [HideInInspector]
-    public Vector3 worldPosition;
-
-    [HideInInspector]
-    public bool walkable = true;
-
-    public int gcost;
-    public int hcost;
-    public void Initialize(int _gridX, int _gridY, Vector3 _worldPosition)
-    {
-        gridX = _gridX;
-        gridY = _gridY;
-        worldPosition = _worldPosition;
-    }
-    public int fcost
-    {
-        get
-        {
-            return gcost + hcost;
-        }
-    }
+    public Node node;
 }
