@@ -163,7 +163,7 @@ public class Map : MonoBehaviour {
             foreach (Node n in path)
             {
                 Gizmos.color = Color.cyan;
-                Gizmos.DrawSphere(n.worldPosition, .5f);
+                Gizmos.DrawSphere(n.worldPosition, .25f);
             }
         }
     }

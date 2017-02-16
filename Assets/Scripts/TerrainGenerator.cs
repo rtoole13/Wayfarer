@@ -13,6 +13,11 @@ public class TerrainGenerator : MonoBehaviour {
     [Range(0,100)]
     public int randomFillPercentage;
 
+    public bool eastCoast;
+    public bool westCoast;
+    public bool northCoast;
+    public bool southCoast;
+
     public int smoothing;
     int[,] localGrid;
 
@@ -42,6 +47,20 @@ public class TerrainGenerator : MonoBehaviour {
         {
             for(int neighborY = gridY - 1; neighborY <= gridY + 1; neighborY++)
         {
+                if (gridY % 2 == 1)
+                {
+                    if (neighborX == -1 && neighborY != 0)
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (neighborX == 1 && neighborY != 0)
+                    {
+                        continue;
+                    }
+                }
                 //FIX ME: Currently not finding exact hex neighbors. acting like a square grid.
                 if (neighborX >= 0 && neighborX < width && neighborY >= 0 && neighborY < height)
                 {
@@ -54,7 +73,9 @@ public class TerrainGenerator : MonoBehaviour {
                 {
                     //encourages growth at map edges. Could just as well do without, or have conditions
                     //to encourage growth at particular edges, rather than all
-                    wallCount++;
+                    
+                    //removing altogether results in a neat borderless, island archipelago-like map
+                    wallCount ++;
                 }
         }
     }
@@ -76,8 +97,27 @@ public class TerrainGenerator : MonoBehaviour {
             {
                 if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
                 {
-                    //Setting all map borders to 1, not likely to be the case for an ocean map
-                    localGrid[x, y] = 1;
+                    if (x == width - 1 && eastCoast)
+                    {
+                        localGrid[x, y] = 1;
+                        continue;
+                    }
+
+                    if (x == 0 && westCoast)
+                    {
+                        localGrid[x, y] = 1;
+                        continue;
+                    }
+                    if (y == height -1 && northCoast)
+                    {
+                        localGrid[x, y] = 1;
+                        continue;
+                    }
+                    if (y == 0 && southCoast)
+                    {
+                        localGrid[x, y] = 1;
+                        continue;
+                    }
                 }
                 else
                 {

@@ -58,7 +58,6 @@ public class Pathfinding : MonoBehaviour {
                 if (movementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
                 {
                     neighbor.gCost = movementCostToNeighbor;
-                    //FIXME: Wrong. needs to work properly for hex
                     neighbor.hCost = GetDistance(neighbor, targetNode);
 
                     neighbor.parent = currentNode;
