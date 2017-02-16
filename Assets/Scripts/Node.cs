@@ -8,7 +8,7 @@ public class Node{
     public Vector3 worldPosition;
 
     public int gridX, gridY;
-
+    public int cubeX, cubeY, cubeZ;
     public int gCost;
     public int hCost;
 
@@ -22,6 +22,7 @@ public class Node{
         gridX = _gridX;
         gridY = _gridY;
         hexRef = _hexRef;
+        CubeCoordinatesFromGrid(gridX, gridY);
     }
 
     public int fCost
@@ -30,5 +31,11 @@ public class Node{
         {
             return gCost + hCost;
         }
+    }
+    void CubeCoordinatesFromGrid(int col, int row)
+    {
+        cubeX = col - (row - row % 1) / 2;
+        cubeY = row;
+        cubeZ = -cubeX - cubeY;
     }
 }

@@ -88,9 +88,11 @@ public class Pathfinding : MonoBehaviour {
     }
     int GetDistance(Node nodeA, Node nodeB)
     {
-        int distX = Mathf.Abs(nodeB.gridX - nodeA.gridX);
-        int distY = Mathf.Abs(nodeB.gridY - nodeA.gridY);
+        int distX = Mathf.Abs(nodeB.cubeX - nodeA.cubeX);
+        int distY = Mathf.Abs(nodeB.cubeY - nodeA.cubeY);
+        int distZ = Mathf.Abs(nodeB.cubeZ - nodeA.cubeZ);
 
-        return distX + distY;
+        return Mathf.Max(distX, distY, distZ);
     }
+    
 }

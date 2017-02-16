@@ -30,6 +30,7 @@ public class Map : MonoBehaviour {
 
         //Call on the terrain generator, update hex colors and grid values
         GenerateNewMap();
+
         
     }
 	
@@ -39,18 +40,7 @@ public class Map : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             GenerateNewMap();
-        }
-        if (Input.GetButton("Jump"))
-        {
-            if (path != null)
-            {
-                foreach (Node n in path)
-                {
-                    MeshRenderer mr = n.hexRef.GetComponentInChildren<MeshRenderer>();
-                    mr.material.color = Color.cyan;
-                }
-            }
-            
+            //Debug.Log("(" + grid[3, 3].cubeX + "," + grid[3, 3].cubeY + "," + grid[3, 3].cubeZ + ")");
         }
     }
     void CreateHexMesh()
@@ -165,5 +155,16 @@ public class Map : MonoBehaviour {
             }
         }
         return neighbors;
-    } 
+    }
+    void OnDrawGizmos()
+    {
+        if (path!= null)
+        {
+            foreach (Node n in path)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawSphere(n.worldPosition, .5f);
+            }
+        }
+    }
 }
