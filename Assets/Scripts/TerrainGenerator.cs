@@ -17,7 +17,7 @@ public class TerrainGenerator : MonoBehaviour {
     public bool westCoast;
     public bool northCoast;
     public bool southCoast;
-
+    
     public int smoothing;
     int[,] localGrid;
 
@@ -43,31 +43,28 @@ public class TerrainGenerator : MonoBehaviour {
     {
         int wallCount = 0;
 
-        for(int neighborX = gridX - 1; neighborX <= gridX + 1; neighborX++)
+        for(int x = -1; x <= 1; x++)
         {
-            for(int neighborY = gridY - 1; neighborY <= gridY + 1; neighborY++)
+            for(int y =  -1; y <= 1; y++)
         {
-                if (gridY % 2 == 1)
+                if (x == 0 && y == 0)
                 {
-                    if (neighborX == -1 && neighborY != 0)
-                    {
-                        continue;
-                    }
+                    continue;
+                }               
+                if (x == -1 && y != 0 && gridY % 2 == 1)
+                {
+                    continue;
                 }
-                else
+                else if (x == 1 && y != 0 && gridY % 2 == 0)
                 {
-                    if (neighborX == 1 && neighborY != 0)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
-                //FIX ME: Currently not finding exact hex neighbors. acting like a square grid.
-                if (neighborX >= 0 && neighborX < width && neighborY >= 0 && neighborY < height)
+                int checkX = gridX + x;
+                int checkY = gridY + y;
+
+                if (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height)
                 {
-                    if (neighborX != gridX || neighborY != gridY)
-                    {
-                        wallCount += localGrid[neighborX, neighborY];
-                    }
+                    wallCount += localGrid[checkX, checkY];
                 }   
                 else
                 {
@@ -75,7 +72,10 @@ public class TerrainGenerator : MonoBehaviour {
                     //to encourage growth at particular edges, rather than all
                     
                     //removing altogether results in a neat borderless, island archipelago-like map
-                    wallCount ++;
+                    if (eastCoast || westCoast || northCoast || southCoast)
+                    {
+                        wallCount ++;
+                    }
                 }
         }
     }
@@ -135,11 +135,11 @@ public class TerrainGenerator : MonoBehaviour {
             {
                 int neighborWallTiles = GetSurroundingWallCount(x, y);
                 
-                if (neighborWallTiles > 4)
+                if (neighborWallTiles > 3)
                 {
                     localGrid[x, y] = 1;
                 }
-                else if (neighborWallTiles < 4) 
+                else if (neighborWallTiles < 3) 
                 {
                     localGrid[x, y] = 0;
                 }
