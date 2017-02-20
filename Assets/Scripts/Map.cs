@@ -9,7 +9,7 @@ public class Map : MonoBehaviour {
 
     public int width;
     public int height;
-
+    public LayerMask collisionMask;
     GameObject[,] mapMesh;
     public Node[,] grid;
 
@@ -109,9 +109,9 @@ public class Map : MonoBehaviour {
     public Node NodeFromMousePosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
+        
         RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo))
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, collisionMask))
         {
             GameObject hitObject = hitInfo.collider.transform.parent.gameObject;
             return hitObject.GetComponent<HexManager>().node;
