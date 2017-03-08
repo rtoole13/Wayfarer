@@ -1,46 +1,39 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Map : MonoBehaviour {
+public class BoardController : MonoBehaviour {
 
+    GameObject hexMap;
     public GameObject hexPrefab;
     TerrainGenerator terrainGen;
+    Pathfinding pathfinder;
 
     public int width;
     public int height;
     public LayerMask collisionMask;
+    public GameObject shipPrefab;
+    public Vector2 gridSpawnLoc;
+
+
+    PlayerController playerShip;
     GameObject[,] mapMesh;
     public Node[,] grid;
 
     public List<Node> path;
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
-        // Initialize hexMesh and grid arrays
-        mapMesh = new GameObject[width, height];
-        grid = new Node[width, height];
-
-        // Create hexMesh
-        CreateHexMesh(); 
-        
-        // Get procedural terrain generator and initialize
-        terrainGen = GetComponentInChildren<TerrainGenerator>();
-        terrainGen.Initialize(width, height);
-
-        //Call on the terrain generator, update hex colors and grid values
-        GenerateNewMap();
-
         
     }
-	
-    void Update()
+	// Update is called once per frame
+	void Update ()
     {
-        //Cycle through generating of maps on click
-        if (Input.GetMouseButtonDown(0))
+        // Cycle through generating of maps on space
+        if (Input.GetKeyDown("space"))
         {
             GenerateNewMap();
-            //Debug.Log("(" + grid[3, 3].cubeX + "," + grid[3, 3].cubeY + "," + grid[3, 3].cubeZ + ")");
         }
     }
     void CreateHexMesh()
@@ -49,16 +42,15 @@ public class Map : MonoBehaviour {
         float xEvenOffset = Mathf.Sqrt(3) / 2;
         float yEvenOffset = 3 / 4f;
 
-        
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                mapMesh[x, y] = createHex(x, y, xEvenOffset, yEvenOffset);
+                mapMesh[x, y] = CreateHex(x, y, xEvenOffset, yEvenOffset);
             }
         }
     }
-    GameObject createHex(int x, int y, float worldXOffset, float worldYOffset)
+    GameObject CreateHex(int x, int y, float worldXOffset, float worldYOffset)
     {
         //from grid coords to world
         float xPos = x * worldXOffset;
@@ -70,12 +62,25 @@ public class Map : MonoBehaviour {
         }
         Vector3 worldPos = new Vector3(xPos, 0, yPos);
         GameObject newHex = (GameObject)Instantiate(hexPrefab, worldPos, Quaternion.identity);
-        
+
         //rename hex
-        newHex.name = "Hex_" + x.ToString().PadLeft(2,'0') + "_" + y.ToString().PadLeft(2, '0');
-        newHex.transform.SetParent(this.transform);
+        newHex.name = "Hex_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0');
+        newHex.transform.SetParent(hexMap.transform);
         return newHex;
     }
+
+    PlayerController CreateShip()
+    {
+        Node shipNode = grid[Mathf.RoundToInt(gridSpawnLoc.x), Mathf.RoundToInt(gridSpawnLoc.y)];
+        GameObject newShip = (GameObject)Instantiate(shipPrefab, shipNode.worldPosition, Quaternion.identity);
+
+        PlayerController shipController = newShip.GetComponent<PlayerController>();
+
+        shipController.Initialize(this, shipNode);
+
+        return shipController;
+    }
+    
     void GenerateNewMap()
     {
         // Get the terrain grid map
@@ -88,7 +93,7 @@ public class Map : MonoBehaviour {
             for (int y = 0; y < height; y++)
             {
                 bool walkable;
-                
+
                 MeshRenderer mr = mapMesh[x, y].GetComponentInChildren<MeshRenderer>();
                 if (terrainGrid[x, y] == 1)
                 {
@@ -100,16 +105,43 @@ public class Map : MonoBehaviour {
                     walkable = true;
                     mr.material.color = Color.white;
                 }
-                grid[x, y] = new Node(walkable, mapMesh[x, y].transform.position, x, y, mapMesh[x,y]);
+                grid[x, y] = new Node(walkable, mapMesh[x, y].transform.position, x, y, mapMesh[x, y]);
                 mapMesh[x, y].GetComponentInChildren<HexManager>().node = grid[x, y];
             }
         }
     }
-    
+    public void InitializeMap()
+    {
+        hexMap = new GameObject();
+        hexMap.name = "hexMap";
+
+        // Initialize hexMesh and grid arrays
+        mapMesh = new GameObject[width, height];
+        grid = new Node[width, height];
+
+        // Get procedural terrain generator and initialize
+        terrainGen = GetComponentInChildren<TerrainGenerator>();
+
+        // Get pathfinder
+        pathfinder = GetComponent<Pathfinding>();
+
+        // Create hexMesh
+        CreateHexMesh();
+
+        //initialize map terrain
+        terrainGen.Initialize(width, height);
+
+        // Call on the terrain generator, update hex colors and grid values
+        GenerateNewMap();
+
+        // Add player
+        playerShip = CreateShip();
+    }
+
     public Node NodeFromMousePosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
+
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, collisionMask))
         {
@@ -130,7 +162,7 @@ public class Map : MonoBehaviour {
                 {
                     continue;
                 }
-                
+
                 if (node.gridY % 2 == 1)
                 {
                     if (x == -1 && y != 0)
@@ -158,7 +190,7 @@ public class Map : MonoBehaviour {
     }
     void OnDrawGizmos()
     {
-        if (path!= null)
+        if (path != null)
         {
             foreach (Node n in path)
             {
@@ -166,5 +198,10 @@ public class Map : MonoBehaviour {
                 Gizmos.DrawSphere(n.worldPosition, .25f);
             }
         }
+    }
+
+    public Node ShipNode()
+    {
+        return playerShip.GetNodeLocation();
     }
 }
