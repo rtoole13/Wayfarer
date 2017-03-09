@@ -29,6 +29,26 @@ public class GameController : MonoBehaviour {
         boardScript = GetComponent<BoardController>();
         InitializeGame();
 	}
+    void Update()
+    {
+        if (playerTurn)
+        {
+            return;
+        }
+        if (Input.GetKeyDown("e"))
+        {
+            
+            EnemyAction();
+
+            //Hacky ass beginning of player turn. Calling on board to tell player to begin turn
+            boardScript.BeginPlayerTurn();
+        }
+        
+    }
+    void EnemyAction()
+    {
+        //Insert enemy activity in here
+    }
     void InitializeGame()
     {
         boardScript.InitializeMap();

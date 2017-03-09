@@ -92,8 +92,9 @@ public class Pathfinding : MonoBehaviour {
             currentNode = currentNode.parent;
         }
         path.Add(startNode);
-
-        Node[] waypoints = SimplifyPath(path);
+        
+        //Bypassing path simplification
+        Node[] waypoints = path.ToArray();
         Array.Reverse(waypoints);
         boardController.path = path;
         return waypoints;

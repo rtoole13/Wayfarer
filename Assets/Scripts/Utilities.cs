@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Utilities : MonoBehaviour {
+public static class Utilities {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    public static Node NodeFromMousePosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+        RaycastHit hitInfo;
+        
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, LayerMask.GetMask("HexMap")))
+        {
+            GameObject hitObject = hitInfo.collider.transform.parent.gameObject;
+            return hitObject.GetComponent<HexManager>().node;
+        }
+        return null;
+    }
+
 }

@@ -7,11 +7,12 @@ public class PlayerController : MonoBehaviour {
 
     public float restartLevelDelay = 1f;
     public float speed = .1f;
+
     private Node nodeLocation;
-
-    private BoardController boardController;
+    private int xDir = 0;
+    private int yDir = 1;
     private int health;
-
+    
     Node[] path;
     int targetIndex;
 
@@ -30,9 +31,9 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0))
         {
-            PathRequestManager.RequestPath(nodeLocation, boardController.NodeFromMousePosition(), OnPathFound);
+            PathRequestManager.RequestPath(nodeLocation, Utilities.NodeFromMousePosition(), OnPathFound);
         }
-	}
+    }
     
     public void OnPathFound(Node[] newPath, bool pathSuccessful)
     {
@@ -41,6 +42,9 @@ public class PlayerController : MonoBehaviour {
             path = newPath;
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
+
+            //Will normally be set after movement and other turn actions are complete
+            EndTurn();
         }
     }
 
@@ -59,6 +63,7 @@ public class PlayerController : MonoBehaviour {
                     path = new Node[0];
                     yield break;
                 }
+                
                 currentWaypoint = path[targetIndex];
             }
             nodeLocation = currentWaypoint;
@@ -66,11 +71,23 @@ public class PlayerController : MonoBehaviour {
             yield return null;
         }
     }
-    public void Initialize(BoardController _boardController, Node node)
+    public void BeginTurn()
     {
-        boardController = _boardController;
-        
+        //calculate stuff 
+        GameController.instance.playerTurn = true;
+    }
+    void EndTurn()
+    {
+        //calculate stuff as needed at end of turn
+        GameController.instance.playerTurn = false;
+    }
+    public void Initialize(Node node, int _dirX, int _dirY)
+    {
         nodeLocation = node;
+        transform.Rotate(Vector3.up, RotationFromDirection(_dirX, _dirY));
+
+        xDir = _dirX;
+        yDir = _dirY;
     }
     
     private void Restart()
@@ -78,12 +95,53 @@ public class PlayerController : MonoBehaviour {
         // reload map
     }
 
+    private int RotationFromDirection(int dirX, int dirY)
+    {
+        int rotAngle = 0; //default at NE
+        if (dirX == 0 && dirY == 1)
+        {
+            //NE
+            rotAngle = 0;
+        }
+        else if(dirX == 1 && dirY == 0)
+        {
+            //E
+            rotAngle = 60;
+        }
+        else if (dirX == 1 && dirY == -1)
+        {
+            //SE
+            rotAngle = 120;
+        }
+        else if (dirX == 0 && dirY == -1)
+        {
+            //SW
+            rotAngle = 180;
+        }
+        else if (dirX == -1 && dirY == 0)
+        {
+            //W
+            rotAngle = 240;
+        }
+        else if (dirX == -1 && dirY == 1)
+        {
+            //NW
+            rotAngle = 300;
+        }
+        else
+        {
+            throw new Exception("Inappropriately formated direction vector. x and y coordinates must be -1, 0, or 1.");
+        }
+
+        return rotAngle;
+    }
     public void TakeDamage(int loss)
     {
         health -= loss;
         CheckIfGameOver();
     }
 
+    
     private void CheckIfGameOver()
     {
         if (health <= 0)

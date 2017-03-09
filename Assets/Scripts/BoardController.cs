@@ -7,13 +7,14 @@ public class BoardController : MonoBehaviour {
     GameObject hexMap;
     public GameObject hexPrefab;
     TerrainGenerator terrainGen;
-    Pathfinding pathfinder;
 
     public int width;
     public int height;
-    public LayerMask collisionMask;
+    
     public GameObject shipPrefab;
     public Vector2 gridSpawnLoc;
+    public int spawnDirX;
+    public int spawnDirY;
 
 
     PlayerController playerShip;
@@ -76,7 +77,7 @@ public class BoardController : MonoBehaviour {
 
         PlayerController shipController = newShip.GetComponent<PlayerController>();
 
-        shipController.Initialize(this, shipNode);
+        shipController.Initialize(shipNode, spawnDirX, spawnDirY);
 
         return shipController;
     }
@@ -122,9 +123,6 @@ public class BoardController : MonoBehaviour {
         // Get procedural terrain generator and initialize
         terrainGen = GetComponentInChildren<TerrainGenerator>();
 
-        // Get pathfinder
-        pathfinder = GetComponent<Pathfinding>();
-
         // Create hexMesh
         CreateHexMesh();
 
@@ -137,20 +135,7 @@ public class BoardController : MonoBehaviour {
         // Add player
         playerShip = CreateShip();
     }
-
-    public Node NodeFromMousePosition()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, collisionMask))
-        {
-            GameObject hitObject = hitInfo.collider.transform.parent.gameObject;
-            return hitObject.GetComponent<HexManager>().node;
-        }
-        return null;
-    }
-
+    
     public List<Node> GetNeighbors(Node node)
     {
         List<Node> neighbors = new List<Node>();
@@ -200,6 +185,11 @@ public class BoardController : MonoBehaviour {
         }
     }
 
+    public void BeginPlayerTurn()
+    {
+        //gross
+        playerShip.BeginTurn();
+    }
     public Node ShipNode()
     {
         return playerShip.GetNodeLocation();
