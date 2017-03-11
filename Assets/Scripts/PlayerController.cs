@@ -27,7 +27,11 @@ public class PlayerController : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
-        if (!GameController.instance.playerTurn) return; 
+        //Currently player turn NOT in progress
+        if (StateController.GetState() != States.PlayerTurn)
+        {
+            return;
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -44,7 +48,8 @@ public class PlayerController : MonoBehaviour {
             StartCoroutine("FollowPath");
 
             //Will normally be set after movement and other turn actions are complete
-            EndTurn();
+            //EndTurn();
+
         }
     }
 
@@ -71,15 +76,10 @@ public class PlayerController : MonoBehaviour {
             yield return null;
         }
     }
-    public void BeginTurn()
-    {
-        //calculate stuff 
-        GameController.instance.playerTurn = true;
-    }
+
     void EndTurn()
     {
-        //calculate stuff as needed at end of turn
-        GameController.instance.playerTurn = false;
+        //calculate stuff as needed at end of turn (IF NEEDED)
     }
     public void Initialize(Node node, int _dirX, int _dirY)
     {
@@ -90,11 +90,6 @@ public class PlayerController : MonoBehaviour {
         yDir = _dirY;
     }
     
-    private void Restart()
-    {
-        // reload map
-    }
-
     private int RotationFromDirection(int dirX, int dirY)
     {
         int rotAngle = 0; //default at NE

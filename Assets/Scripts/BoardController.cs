@@ -185,11 +185,12 @@ public class BoardController : MonoBehaviour {
         }
     }
 
-    public void BeginPlayerTurn()
+    public void ResetBoard()
     {
-        //gross
-        playerShip.BeginTurn();
+        //TODO: Cleanup board assests and reset scene
+        Debug.Log("TODO: Cleaning up board..");
     }
+
     public Node ShipNode()
     {
         return playerShip.GetNodeLocation();
