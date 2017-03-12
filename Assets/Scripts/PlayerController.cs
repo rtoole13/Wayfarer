@@ -68,10 +68,18 @@ public class PlayerController : MonoBehaviour {
                     path = new Node[0];
                     yield break;
                 }
-                
                 currentWaypoint = path[targetIndex];
+                int xNewDir = currentWaypoint.cubeX - nodeLocation.cubeX;
+                int yNewDir = currentWaypoint.cubeY - nodeLocation.cubeY;
+                if (xNewDir != xDir || yNewDir != yDir)
+                {
+                    xDir = xNewDir;
+                    yDir = yNewDir;
+                    transform.eulerAngles = new Vector3(0, RotationFromDirection(xDir, yDir), 0);
+                }
+                nodeLocation = currentWaypoint;
             }
-            nodeLocation = currentWaypoint;
+            
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, speed);
             yield return null;
         }
@@ -84,10 +92,10 @@ public class PlayerController : MonoBehaviour {
     public void Initialize(Node node, int _dirX, int _dirY)
     {
         nodeLocation = node;
-        transform.Rotate(Vector3.up, RotationFromDirection(_dirX, _dirY));
-
         xDir = _dirX;
         yDir = _dirY;
+        transform.eulerAngles = new Vector3(0, RotationFromDirection(xDir, yDir), 0);
+        
     }
     
     private int RotationFromDirection(int dirX, int dirY)
