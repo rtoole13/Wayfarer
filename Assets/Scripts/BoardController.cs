@@ -18,7 +18,7 @@ public class BoardController : MonoBehaviour {
     public int spawnDirY;
 
 
-    PlayerController playerShip;
+    UnitController playerShip;
     GameObject[,] mapMesh;
     public Node[,] grid;
 
@@ -188,7 +188,6 @@ public class BoardController : MonoBehaviour {
 
     public void ResetBoard()
     {
-        //TODO: Cleanup board assests and reset scene
         CleanBoard();
         InitializeMap();
     }
