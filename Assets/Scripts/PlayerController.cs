@@ -157,4 +157,9 @@ public class PlayerController : MonoBehaviour {
     {
         return nodeLocation;
     }
+
+    internal void Destroy()
+    {
+        Destroy(gameObject);
+    }
 }

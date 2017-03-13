@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BoardController : MonoBehaviour {
 
@@ -188,7 +189,14 @@ public class BoardController : MonoBehaviour {
     public void ResetBoard()
     {
         //TODO: Cleanup board assests and reset scene
-        Debug.Log("TODO: Cleaning up board..");
+        CleanBoard();
+        InitializeMap();
+    }
+
+    public void CleanBoard()
+    {
+        Destroy(hexMap);
+        playerShip.Destroy();
     }
 
     public Node ShipNode()
