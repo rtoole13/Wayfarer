@@ -12,10 +12,6 @@ public class BoardController : MonoBehaviour {
     public int width;
     public int height;
     
-    public Vector2 gridSpawnLoc;
-    public int spawnDirX;
-    public int spawnDirY;
-
     UnitFactory factory;
     UnitController playerShip;
     GameObject[,] mapMesh;
@@ -72,8 +68,6 @@ public class BoardController : MonoBehaviour {
     }
     public void InitializeMap()
     {
-        
-
         hexMap = new GameObject();
         hexMap.name = "hexMap";
         // Initialize hexMesh and grid arrays
@@ -93,9 +87,26 @@ public class BoardController : MonoBehaviour {
         // Call on the terrain generator, update hex colors and grid values
         GenerateNewMap();
 
-        // Add player
-        Node playerSpawn = grid[Mathf.RoundToInt(gridSpawnLoc.x), Mathf.RoundToInt(gridSpawnLoc.y)];
-        playerShip = factory.CreateShip(playerSpawn,spawnDirX,spawnDirY);
+        
+    }
+
+    public void InitializePlayerUnits(PlayerController[] players)
+    {
+        foreach(PlayerController player in players)
+        {
+            if (player.IsHuman)
+            {
+                foreach (Token token in player.GetTokens())
+                {
+                    // Add player
+                    Node playerSpawn = grid[Mathf.RoundToInt(token.gridSpawnLoc.x), Mathf.RoundToInt(token.gridSpawnLoc.y)];
+                    playerShip = factory.CreateShip(playerSpawn, Mathf.RoundToInt(token.spawnDir.x), Mathf.RoundToInt(token.spawnDir.y));
+                }
+            }
+
+
+        }
+        
     }
     
     public List<Node> GetNeighbors(Node node)

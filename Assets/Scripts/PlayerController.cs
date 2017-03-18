@@ -3,47 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : UnitController {
+public class PlayerController :MonoBehaviour{
 
-    public float restartLevelDelay = 1f;
+    public bool isHuman;
 
-
-    // Use this for initialization
-    void Start () {
-        health = GameController.instance.playerHealth;
-	}
-
-    private void OnDisable()
+    public bool IsHuman
     {
-        GameController.instance.playerHealth = health;
-    }
-	// Update is called once per frame
-	void Update () {
-        //Currently player turn NOT in progress
-        if (StateController.GetState() != States.PlayerTurn)
+        get
         {
-            return;
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            PathRequestManager.RequestPath(nodeLocation, Utilities.NodeFromMousePosition(), OnPathFound);
+            return isHuman;
         }
     }
 
-    protected override void TakeDamage(int loss)
+    public void AddNewShip(HumanUnitController ship)
     {
-        health -= loss;
-        CheckIfGameOver();
+
     }
 
-    private void CheckIfGameOver()
+    internal Token[] GetTokens()
     {
-        if (health <= 0)
-        {
-            GameController.instance.GameOver();
-        }
+        return GetComponents<Token>();
     }
-
-   
 }

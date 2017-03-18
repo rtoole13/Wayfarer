@@ -18,12 +18,11 @@ public class UnitFactory : MonoBehaviour{
         this.mapMesh = mapMesh;
     }
 
-    public PlayerController CreateShip(Node shipNode,int spawnDirX, int spawnDirY)
+    public HumanUnitController CreateShip(Node shipNode,int spawnDirX, int spawnDirY)
     {
         GameObject newShip = (GameObject)Instantiate(shipPrefab, shipNode.worldPosition, Quaternion.identity);
 
-        PlayerController shipController = newShip.GetComponent<PlayerController>();
-
+        HumanUnitController shipController = newShip.GetComponent<HumanUnitController>();
         shipController.Initialize(shipNode, spawnDirX, spawnDirY);
 
         return shipController;

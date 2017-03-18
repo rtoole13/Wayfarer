@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour
 
     public BoardController boardScript;
 
+    private PlayerController[] players;
+
     public int playerHealth = 100;
     // Update is called once per frame
     void Awake()
@@ -68,7 +70,11 @@ public class GameController : MonoBehaviour
     }
     void InitializeGame()
     {
+        players = GetComponentsInChildren<PlayerController>();
+        
         boardScript.InitializeMap();
+        boardScript.InitializePlayerUnits(players);
+
     }
     public void GameOver()
     {
