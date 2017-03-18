@@ -16,7 +16,7 @@ public class BoardController : MonoBehaviour {
     public int spawnDirX;
     public int spawnDirY;
 
-    UnitFactory factory = new UnitFactory();
+    UnitFactory factory;
     UnitController playerShip;
     GameObject[,] mapMesh;
     public Node[,] grid;
@@ -27,9 +27,9 @@ public class BoardController : MonoBehaviour {
     public List<Node> path;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
-
+        factory = GetComponent<UnitFactory>();
     }
 	// Update is called once per frame
 	void Update ()
@@ -72,6 +72,8 @@ public class BoardController : MonoBehaviour {
     }
     public void InitializeMap()
     {
+        
+
         hexMap = new GameObject();
         hexMap.name = "hexMap";
         // Initialize hexMesh and grid arrays

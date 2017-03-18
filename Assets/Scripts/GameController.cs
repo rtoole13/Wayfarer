@@ -25,13 +25,14 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         boardScript = GetComponent<BoardController>();
-        InitializeGame();
+        
         StateController.getInstance();
     }
 
     
     public void Start()
     {
+        InitializeGame();
         //Call game start.. Ideally wouldn't occur until after all  menus have been dealt with, but for now..
         StateController.BeginGame();
     }
