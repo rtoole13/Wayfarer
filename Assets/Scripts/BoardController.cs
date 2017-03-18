@@ -6,28 +6,30 @@ using UnityEngine.SceneManagement;
 public class BoardController : MonoBehaviour {
 
     GameObject hexMap;
-    public GameObject hexPrefab;
+    
     TerrainGenerator terrainGen;
 
     public int width;
     public int height;
     
-    public GameObject shipPrefab;
     public Vector2 gridSpawnLoc;
     public int spawnDirX;
     public int spawnDirY;
 
-
+    UnitFactory factory = new UnitFactory();
     UnitController playerShip;
     GameObject[,] mapMesh;
     public Node[,] grid;
+
+    public GameObject shipPrefab;
+    public GameObject hexPrefab;
 
     public List<Node> path;
 
     // Use this for initialization
     void Start()
     {
-        
+
     }
 	// Update is called once per frame
 	void Update ()
@@ -37,50 +39,6 @@ public class BoardController : MonoBehaviour {
         {
             GenerateNewMap();
         }
-    }
-    void CreateHexMesh()
-    {
-        // Initialize map Mesh, intialize values of offset from grid integer coordinates to world coordinates
-        float xEvenOffset = Mathf.Sqrt(3) / 2;
-        float yEvenOffset = 3 / 4f;
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                mapMesh[x, y] = CreateHex(x, y, xEvenOffset, yEvenOffset);
-            }
-        }
-    }
-    GameObject CreateHex(int x, int y, float worldXOffset, float worldYOffset)
-    {
-        //from grid coords to world
-        float xPos = x * worldXOffset;
-        float yPos = y * worldYOffset;
-        if (y % 2 == 1)
-        {
-            //on even rows, x offset is an additional half of x offset
-            xPos += worldXOffset / 2f;
-        }
-        Vector3 worldPos = new Vector3(xPos, 0, yPos);
-        GameObject newHex = (GameObject)Instantiate(hexPrefab, worldPos, Quaternion.identity);
-
-        //rename hex
-        newHex.name = "Hex_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0');
-        newHex.transform.SetParent(hexMap.transform);
-        return newHex;
-    }
-
-    PlayerController CreateShip()
-    {
-        Node shipNode = grid[Mathf.RoundToInt(gridSpawnLoc.x), Mathf.RoundToInt(gridSpawnLoc.y)];
-        GameObject newShip = (GameObject)Instantiate(shipPrefab, shipNode.worldPosition, Quaternion.identity);
-
-        PlayerController shipController = newShip.GetComponent<PlayerController>();
-
-        shipController.Initialize(shipNode, spawnDirX, spawnDirY);
-
-        return shipController;
     }
     
     void GenerateNewMap()
@@ -116,17 +74,17 @@ public class BoardController : MonoBehaviour {
     {
         hexMap = new GameObject();
         hexMap.name = "hexMap";
-
         // Initialize hexMesh and grid arrays
         mapMesh = new GameObject[width, height];
         grid = new Node[width, height];
+        factory.Initialize(hexMap, mapMesh,shipPrefab,hexPrefab);
 
         // Get procedural terrain generator and initialize
         terrainGen = GetComponentInChildren<TerrainGenerator>();
 
         // Create hexMesh
-        CreateHexMesh();
-
+        mapMesh = factory.CreateHexMesh(width,height);
+        
         //initialize map terrain
         terrainGen.Initialize(width, height);
 
@@ -134,7 +92,8 @@ public class BoardController : MonoBehaviour {
         GenerateNewMap();
 
         // Add player
-        playerShip = CreateShip();
+        Node playerSpawn = grid[Mathf.RoundToInt(gridSpawnLoc.x), Mathf.RoundToInt(gridSpawnLoc.y)];
+        playerShip = factory.CreateShip(playerSpawn,spawnDirX,spawnDirY);
     }
     
     public List<Node> GetNeighbors(Node node)
