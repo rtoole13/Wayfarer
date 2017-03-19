@@ -33,6 +33,23 @@ public class PlayerController :MonoBehaviour{
         }
     }
 
+    public bool ShipsMoving
+    {
+        get
+        {
+            foreach (UnitController unit in units)
+            {
+                return unit.IsMoving ? true : false;
+            }
+            return false;
+        }
+    }
+
+    private void isMoving()
+    {
+        throw new NotImplementedException();
+    }
+
     internal Token[] GetTokens()
     {
         return GetComponents<Token>();

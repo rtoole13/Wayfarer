@@ -265,6 +265,14 @@ public abstract class UnitController : MonoBehaviour {
         }
     }
 
+    public bool IsMoving
+    {
+        get
+        {
+            return isMoving;
+        }
+    }
+
     protected virtual void TakeDamage(int loss)
     {
         health -= loss;

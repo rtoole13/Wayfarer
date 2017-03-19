@@ -46,7 +46,10 @@ public class GameController : MonoBehaviour
         //End Player turn
         if (Input.GetKeyDown("e"))
         {
-            EndHumanTurn();
+            if (!EndHumanTurn())
+            {
+                return;
+            }
             StateController.NextTurn(); //Rotate to enemy turn
             EnemyAction();
             StateController.NextTurn(); //Rotate to human turn
@@ -67,15 +70,22 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void EndHumanTurn()
+    private bool EndHumanTurn()
     {
         foreach (PlayerController player in players)
         {
             if (player.IsHuman)
             {
+                if (player.ShipsMoving)
+                {
+                    return false;
+                }
                 player.EndTurn();
+                return true;
             }
         }
+        //Only occurs if AI exists WITHOUT a human existing
+        return true;
     }
 
     private void HumanAction()
