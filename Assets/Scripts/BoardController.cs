@@ -102,8 +102,16 @@ public class BoardController : MonoBehaviour {
                     player.AddNewUnit(playerShip);
                 }
             }
-
-
+            else
+            {
+                foreach (Token token in player.GetTokens())
+                {
+                    // Add player
+                    Node playerSpawn = grid[Mathf.RoundToInt(token.gridSpawnLoc.x), Mathf.RoundToInt(token.gridSpawnLoc.y)];
+                    var playerShip = factory.CreateAIShip(playerSpawn, Mathf.RoundToInt(token.spawnDir.x), Mathf.RoundToInt(token.spawnDir.y));
+                    player.AddNewUnit(playerShip);
+                }
+            }
         }
         
     }

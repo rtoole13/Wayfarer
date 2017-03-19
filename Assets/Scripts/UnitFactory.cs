@@ -8,7 +8,8 @@ public class UnitFactory : MonoBehaviour{
     private GameObject hexMap;
     private GameObject[,] mapMesh;
     public GameObject hexPrefab;
-    public GameObject shipPrefab;
+    public GameObject aiShipPrefab;
+    public GameObject humanShipPrefab;
 
     public void Initialize(GameObject hexMap, GameObject[,] mapMesh)
     {
@@ -18,11 +19,17 @@ public class UnitFactory : MonoBehaviour{
 
     public HumanUnitController CreateShip(Node shipNode,int spawnDirX, int spawnDirY)
     {
-        GameObject newShip = (GameObject)Instantiate(shipPrefab, shipNode.worldPosition, Quaternion.identity);
-
+        GameObject newShip = (GameObject)Instantiate(humanShipPrefab, shipNode.worldPosition, Quaternion.identity);
         HumanUnitController shipController = newShip.GetComponent<HumanUnitController>();
         shipController.Initialize(shipNode, spawnDirX, spawnDirY);
+        return shipController;
+    }
 
+    public EnemyUnitController CreateAIShip(Node shipNode, int spawnDirX, int spawnDirY)
+    {
+        GameObject newShip = (GameObject)Instantiate(aiShipPrefab, shipNode.worldPosition, Quaternion.identity);
+        EnemyUnitController shipController = newShip.GetComponent<EnemyUnitController>();
+        shipController.Initialize(shipNode, spawnDirX, spawnDirY);
         return shipController;
     }
 
