@@ -17,9 +17,6 @@ public class BoardController : MonoBehaviour {
     GameObject[,] mapMesh;
     public Node[,] grid;
 
-    public GameObject shipPrefab;
-    public GameObject hexPrefab;
-
     public List<Node> path;
 
     // Use this for initialization
@@ -73,7 +70,8 @@ public class BoardController : MonoBehaviour {
         // Initialize hexMesh and grid arrays
         mapMesh = new GameObject[width, height];
         grid = new Node[width, height];
-        factory.Initialize(hexMap, mapMesh,shipPrefab,hexPrefab);
+
+        factory.Initialize(hexMap, mapMesh);
 
         // Get procedural terrain generator and initialize
         terrainGen = GetComponentInChildren<TerrainGenerator>();

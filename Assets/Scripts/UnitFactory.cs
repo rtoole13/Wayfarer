@@ -7,13 +7,11 @@ public class UnitFactory : MonoBehaviour{
     
     private GameObject hexMap;
     private GameObject[,] mapMesh;
-    private GameObject hexPrefab;
-    private GameObject shipPrefab;
+    public GameObject hexPrefab;
+    public GameObject shipPrefab;
 
-    public void Initialize(GameObject hexMap, GameObject[,] mapMesh,GameObject shipPrefab,GameObject hexPrefab)
+    public void Initialize(GameObject hexMap, GameObject[,] mapMesh)
     {
-        this.hexPrefab = hexPrefab;
-        this.shipPrefab = shipPrefab;
         this.hexMap = hexMap;
         this.mapMesh = mapMesh;
     }
