@@ -18,6 +18,7 @@ public abstract class UnitController : MonoBehaviour {
     private int hexesMoved = 0;
     private int prevHexesMoved = 0;
 
+    protected bool isMoving = false;
     private bool canRotate = true;
     private List<Vector2> walkables;
 
@@ -169,8 +170,10 @@ public abstract class UnitController : MonoBehaviour {
             {
                 return;
             }
+            
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
+            isMoving = true;
             hexesMoved += path.Length-1;   
             currentMovePoints -= path.Length - 1;
             if (prevHexesMoved == 0)
@@ -193,6 +196,7 @@ public abstract class UnitController : MonoBehaviour {
                 {
                     targetIndex = 0;
                     path = new Node[0];
+                    isMoving = false;
                     yield break;
                 }
                 currentWaypoint = path[targetIndex];

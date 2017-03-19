@@ -7,7 +7,6 @@ public class HumanUnitController : UnitController {
 
     public float restartLevelDelay = 1f;
 
-
     // Use this for initialization
     void Start () {
         health = GameController.instance.playerHealth;
@@ -24,8 +23,7 @@ public class HumanUnitController : UnitController {
         {
             return;
         }
-
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isMoving)
         {
             if (currentMovePoints <= 0)
             {
@@ -43,7 +41,7 @@ public class HumanUnitController : UnitController {
             
         }
     }
-
+    
     protected override void TakeDamage(int loss)
     {
         health -= loss;
