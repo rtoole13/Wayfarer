@@ -20,7 +20,7 @@ public abstract class UnitController : MonoBehaviour {
 
     protected bool isMoving = false;
     private bool canRotate = true;
-    private List<Vector2> walkables;
+    protected List<Vector2> walkables;
 
     public int health;
 
@@ -45,11 +45,9 @@ public abstract class UnitController : MonoBehaviour {
         transform.eulerAngles = new Vector3(0, RotationFromDirection(xDir, yDir), 0);
     }
 
-    internal void BeginTurn()
+    public virtual void BeginTurn()
     {
-        
         InitializeMovepoints();
-        Debug.Log("Starting movepoints " + currentMovePoints);
         FindWalkableSet();
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -63,6 +64,12 @@ public class BoardController : MonoBehaviour {
             }
         }
     }
+
+    internal Node GetNode(int x, int y)
+    {
+        return grid[x, y];
+    }
+
     public void InitializeMap()
     {
         hexMap = new GameObject();

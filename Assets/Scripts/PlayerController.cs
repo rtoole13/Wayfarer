@@ -45,11 +45,6 @@ public class PlayerController :MonoBehaviour{
         }
     }
 
-    private void isMoving()
-    {
-        throw new NotImplementedException();
-    }
-
     internal Token[] GetTokens()
     {
         return GetComponents<Token>();

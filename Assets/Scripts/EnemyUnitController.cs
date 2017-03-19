@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class EnemyUnitController : UnitController {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    System.Random rnjesus = new System.Random();
+
+    public override void BeginTurn()
+    {
+        base.BeginTurn();
+        Vector2 targetIndex = walkables[rnjesus.Next(0,walkables.Count-1)];
+        Node targetNode = Utilities.NodeFromGridIndex(targetIndex);
+        PathRequestManager.RequestPath(nodeLocation, targetNode, OnPathFound);
+    }
 }

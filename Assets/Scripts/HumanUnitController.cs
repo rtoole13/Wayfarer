@@ -41,7 +41,13 @@ public class HumanUnitController : UnitController {
             
         }
     }
-    
+
+    public override void BeginTurn()
+    {
+        base.BeginTurn();
+        Debug.Log("Starting movepoints " + currentMovePoints);
+    }
+
     protected override void TakeDamage(int loss)
     {
         health -= loss;

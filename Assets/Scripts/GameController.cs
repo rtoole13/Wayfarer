@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         boardScript = GetComponent<BoardController>();
-        
+        Utilities.getInstance(boardScript);
         StateController.getInstance();
     }
 
@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
                 return;
             }
             StateController.NextTurn(); //Rotate to enemy turn
-            EnemyAction();
+            EnemyAction();          
             StateController.NextTurn(); //Rotate to human turn
             HumanAction();
         }
@@ -68,6 +68,24 @@ public class GameController : MonoBehaviour
                 StateController.BeginGame();
             }
         }
+    }
+
+    private bool EndEnemyTurn()
+    {
+        foreach (PlayerController player in players)
+        {
+            if (!player.IsHuman)
+            {
+                if (player.ShipsMoving)
+                {
+                    return false;
+                }
+                player.EndTurn();
+                return true;
+            }
+        }
+       
+        return true;
     }
 
     private bool EndHumanTurn()
