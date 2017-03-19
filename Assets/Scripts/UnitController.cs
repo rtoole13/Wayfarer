@@ -12,7 +12,7 @@ public abstract class UnitController : MonoBehaviour {
 
 
     private int initialMovePoints = 1;
-    private int currentMovePoints = 0;
+    protected int currentMovePoints = 0;
     private int maxMovePoints = 3;
 
     private int hexesMoved = 0;
@@ -165,6 +165,10 @@ public abstract class UnitController : MonoBehaviour {
         if (pathSuccessful)
         {
             path = newPath;
+            if (currentMovePoints < path.Length - 1)
+            {
+                return;
+            }
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
             hexesMoved += path.Length-1;   
@@ -174,7 +178,6 @@ public abstract class UnitController : MonoBehaviour {
                 canRotate = false;
             }
         }
-        Debug.Log("Current movepoints " + currentMovePoints);
     }
 
     protected IEnumerator FollowPath()

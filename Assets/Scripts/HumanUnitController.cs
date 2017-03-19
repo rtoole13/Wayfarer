@@ -27,6 +27,10 @@ public class HumanUnitController : UnitController {
 
         if (Input.GetMouseButtonDown(0))
         {
+            if (currentMovePoints <= 0)
+            {
+                return;
+            }
             Node mouseNode = Utilities.NodeFromMousePosition();
             Vector2 gridLocation = new Vector2(mouseNode.gridX, mouseNode.gridY);
             foreach(Vector2 walkable in Walkables)
