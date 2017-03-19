@@ -27,7 +27,16 @@ public class HumanUnitController : UnitController {
 
         if (Input.GetMouseButtonDown(0))
         {
-            PathRequestManager.RequestPath(nodeLocation, Utilities.NodeFromMousePosition(), OnPathFound);
+            Node mouseNode = Utilities.NodeFromMousePosition();
+            Vector2 gridLocation = new Vector2(mouseNode.gridX, mouseNode.gridY);
+            foreach(Vector2 walkable in Walkables)
+            {
+                if(walkable.x == gridLocation.x && walkable.y == gridLocation.y)
+                {
+                    PathRequestManager.RequestPath(nodeLocation, mouseNode, OnPathFound);
+                }
+            }
+            
         }
     }
 

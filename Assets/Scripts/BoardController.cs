@@ -101,6 +101,7 @@ public class BoardController : MonoBehaviour {
                     // Add player
                     Node playerSpawn = grid[Mathf.RoundToInt(token.gridSpawnLoc.x), Mathf.RoundToInt(token.gridSpawnLoc.y)];
                     playerShip = factory.CreateShip(playerSpawn, Mathf.RoundToInt(token.spawnDir.x), Mathf.RoundToInt(token.spawnDir.y));
+                    player.AddNewUnit(playerShip);
                 }
             }
 
@@ -154,6 +155,15 @@ public class BoardController : MonoBehaviour {
             {
                 Gizmos.color = Color.cyan;
                 Gizmos.DrawSphere(n.worldPosition, .25f);
+            }
+        }
+        if (playerShip != null && playerShip.Walkables != null)
+        {
+            foreach (Vector2 walkable in playerShip.Walkables)
+            {
+                Gizmos.color = Color.green;
+                Vector3 worldPos = grid[Mathf.RoundToInt(walkable.x), Mathf.RoundToInt(walkable.y)].worldPosition;
+                Gizmos.DrawSphere(worldPos, .25f);
             }
         }
     }

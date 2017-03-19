@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,6 +38,7 @@ public class GameController : MonoBehaviour
         InitializeGame();
         //Call game start.. Ideally wouldn't occur until after all  menus have been dealt with, but for now..
         StateController.BeginGame();
+        HumanAction();
     }
 
     void Update()
@@ -44,8 +46,11 @@ public class GameController : MonoBehaviour
         //End Player turn
         if (Input.GetKeyDown("e"))
         {
-            StateController.NextTurn();
+            EndHumanTurn();
+            StateController.NextTurn(); //Rotate to enemy turn
             EnemyAction();
+            StateController.NextTurn(); //Rotate to human turn
+            HumanAction();
         }
 
         if (Input.GetKeyDown("g"))
@@ -61,12 +66,38 @@ public class GameController : MonoBehaviour
             }
         }
     }
-    void EnemyAction()
-    {
 
-        Debug.Log("Enemy actions occur.. skipping");
-        //Move to player turn as there is no enemy action current. Change this later to firest execute enemy actions
-        StateController.NextTurn();
+    private void EndHumanTurn()
+    {
+        foreach (PlayerController player in players)
+        {
+            if (player.IsHuman)
+            {
+                player.EndTurn();
+            }
+        }
+    }
+
+    private void HumanAction()
+    {
+        foreach(PlayerController player in players)
+        {
+            if (player.IsHuman)
+            {
+                player.BeginTurn();
+            }
+        }
+    }
+
+    private void EnemyAction()
+    {
+        foreach (PlayerController player in players)
+        {
+            if (!player.IsHuman)
+            {
+                player.BeginTurn();
+            }
+        }
     }
     void InitializeGame()
     {

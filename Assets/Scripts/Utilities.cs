@@ -19,4 +19,11 @@ public static class Utilities {
         return null;
     }
 
+    public static Vector2 GridFromCubeCoords(Vector3 cubeCoords)
+    {
+        int row = Mathf.RoundToInt(cubeCoords.y);
+        int col = Mathf.RoundToInt(cubeCoords.x + (row - row % 1) / 2);
+        return new Vector2(col, row);
+    }
+
 }
