@@ -8,6 +8,7 @@ public class EnemyUnitController : UnitController {
 
     public override void BeginTurn()
     {
+        isMoving = true;
         base.BeginTurn();
         Vector2 targetIndex = walkables[rnjesus.Next(0,walkables.Count-1)];
         Node targetNode = Utilities.NodeFromGridIndex(targetIndex);

@@ -3,15 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController :MonoBehaviour{
+public class PlayerController : MonoBehaviour
+{
 
     public bool isHuman;
     private List<UnitController> units = new List<UnitController>();
 
+    public delegate void ShipMoving(PlayerController player);
+    public event ShipMoving shipDoneMoving;
+
+    public void Update()
+    {
+        if (!ShipsMoving)
+        {
+            if(shipDoneMoving != null)
+            {
+                shipDoneMoving(this);
+            }
+        }
+    }
+
     public void BeginTurn()
     {
-        //Loop over all units and call unit.beginTurn();
-        foreach(UnitController unit in units)
+        foreach (UnitController unit in units)
         {
             unit.BeginTurn();
         }

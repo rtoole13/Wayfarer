@@ -11,8 +11,8 @@ public class GameController : MonoBehaviour
     public BoardController boardScript;
 
     private PlayerController[] players;
-
     public int playerHealth = 100;
+
     // Update is called once per frame
     void Awake()
     {
@@ -51,9 +51,7 @@ public class GameController : MonoBehaviour
                 return;
             }
             StateController.NextTurn(); //Rotate to enemy turn
-            EnemyAction();          
-            StateController.NextTurn(); //Rotate to human turn
-            HumanAction();
+            EnemyAction();
         }
 
         if (Input.GetKeyDown("g"))
@@ -70,22 +68,12 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private bool EndEnemyTurn()
+    private void EndEnemyTurn(PlayerController player)
     {
-        foreach (PlayerController player in players)
-        {
-            if (!player.IsHuman)
-            {
-                if (player.ShipsMoving)
-                {
-                    return false;
-                }
-                player.EndTurn();
-                return true;
-            }
-        }
-       
-        return true;
+        player.shipDoneMoving -= EndEnemyTurn;
+        player.EndTurn();
+        StateController.NextTurn(); //Rotate to human turn
+        HumanAction();
     }
 
     private bool EndHumanTurn()
@@ -123,6 +111,7 @@ public class GameController : MonoBehaviour
         {
             if (!player.IsHuman)
             {
+                player.shipDoneMoving += EndEnemyTurn;
                 player.BeginTurn();
             }
         }
