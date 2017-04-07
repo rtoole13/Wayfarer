@@ -30,12 +30,17 @@ public class HumanUnitController : UnitController {
                 return;
             }
             Node mouseNode = Utilities.NodeFromMousePosition();
+            if (mouseNode.occupied)
+            {
+                return;
+            }
             Vector2 gridLocation = new Vector2(mouseNode.gridX, mouseNode.gridY);
             foreach(Vector2 walkable in Walkables)
             {
                 if(walkable.x == gridLocation.x && walkable.y == gridLocation.y)
                 {
                     PathRequestManager.RequestPath(nodeLocation, mouseNode, xDir, yDir, OnPathFound);
+                    break;
                 }
             }
             

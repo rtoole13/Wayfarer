@@ -5,6 +5,7 @@ using UnityEngine;
 public class Node{
 
     public bool walkable;
+    public bool occupied = false;
     public Vector3 worldPosition;
 
     public int gridX, gridY;

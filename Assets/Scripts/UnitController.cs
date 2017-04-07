@@ -40,6 +40,7 @@ public abstract class UnitController : MonoBehaviour {
     public void Initialize(Node node, int _dirX, int _dirY)
     {
         nodeLocation = node;
+        nodeLocation.occupied = true;
         xDir = _dirX;
         yDir = _dirY;
         transform.eulerAngles = new Vector3(0, RotationFromDirection(xDir, yDir), 0);
@@ -207,7 +208,7 @@ public abstract class UnitController : MonoBehaviour {
                     yDir = yNewDir;
                     transform.eulerAngles = new Vector3(0, RotationFromDirection(xDir, yDir), 0);
                 }
-                nodeLocation = currentWaypoint;
+                ChangeNodeLocation(currentWaypoint);
             }
 
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, speed);
@@ -281,6 +282,12 @@ public abstract class UnitController : MonoBehaviour {
         Destroy(gameObject);
     }
 
+    protected void ChangeNodeLocation(Node targetNode)
+    {
+        nodeLocation.occupied = false;
+        nodeLocation = targetNode;
+        nodeLocation.occupied = true;
+    }
     public Node GetNodeLocation()
     {
         return nodeLocation;

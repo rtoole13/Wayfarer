@@ -72,13 +72,14 @@ public class Pathfinding : MonoBehaviour {
                     if (xDir == Mathf.RoundToInt(neighborDir.x) && yDir == Mathf.RoundToInt(neighborDir.y))
                     {
                         movementCostToNeighbor += 1;
-                        Debug.Log("old dirX" + xDir + "old dirY" + yDir);
-                        Debug.Log(neighborDir);
+                        
 
                     }
                     else
                     {
                         movementCostToNeighbor += 3;
+                        Debug.Log("old dirX: " + xDir + "old dirY: " + yDir);
+                        Debug.Log(neighborDir);
                     }
 
                     if (movementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
