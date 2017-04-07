@@ -10,9 +10,9 @@ public class EnemyUnitController : UnitController {
     {
         isMoving = true;
         base.BeginTurn();
-        Vector2 targetIndex = walkables[rnjesus.Next(0,walkables.Count-1)];
+        Vector2 targetIndex = walkables[rnjesus.Next(0, walkables.Count - 1)];
         Node targetNode = Utilities.NodeFromGridIndex(targetIndex);
-        if (targetNode.occupied)
+        if (targetNode == null || targetNode.occupied)
         {
             return;
         }

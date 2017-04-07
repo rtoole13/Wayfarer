@@ -40,11 +40,6 @@ public class Pathfinding : MonoBehaviour {
                 {
                     if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
                     {
-                        /*
-                        Vector2 newDir = GetDirection(currentNode, openSet[i]);
-                        xDir = Mathf.RoundToInt(newDir.x);
-                        yDir = Mathf.RoundToInt(newDir.y);
-                        */
                         currentNode = openSet[i];
                     }
                 }
@@ -72,14 +67,10 @@ public class Pathfinding : MonoBehaviour {
                     if (xDir == Mathf.RoundToInt(neighborDir.x) && yDir == Mathf.RoundToInt(neighborDir.y))
                     {
                         movementCostToNeighbor += 1;
-                        
-
                     }
                     else
                     {
                         movementCostToNeighbor += 3;
-                        Debug.Log("old dirX: " + xDir + "old dirY: " + yDir);
-                        Debug.Log(neighborDir);
                     }
 
                     if (movementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))

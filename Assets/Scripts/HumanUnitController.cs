@@ -30,7 +30,7 @@ public class HumanUnitController : UnitController {
                 return;
             }
             Node mouseNode = Utilities.NodeFromMousePosition();
-            if (mouseNode.occupied)
+            if (mouseNode == null || mouseNode.occupied)
             {
                 return;
             }

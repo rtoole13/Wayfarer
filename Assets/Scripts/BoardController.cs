@@ -67,7 +67,11 @@ public class BoardController : MonoBehaviour {
 
     internal Node GetNode(int x, int y)
     {
-        return grid[x, y];
+        if (x >= 0 && x < width && y >= 0 && y < height)
+        {
+            return grid[x, y];
+        }
+        return null;
     }
 
     public void InitializeMap()
@@ -175,8 +179,13 @@ public class BoardController : MonoBehaviour {
             foreach (Vector2 walkable in playerShip.Walkables)
             {
                 Gizmos.color = Color.green;
-                Vector3 worldPos = grid[Mathf.RoundToInt(walkable.x), Mathf.RoundToInt(walkable.y)].worldPosition;
-                Gizmos.DrawSphere(worldPos, .25f);
+                int gridX = Mathf.RoundToInt(walkable.x);
+                int gridY = Mathf.RoundToInt(walkable.y);
+                if (gridX >= 0 && gridX < width && gridY >= 0 && gridY < height)
+                {
+                    Vector3 worldPos = grid[Mathf.RoundToInt(walkable.x), Mathf.RoundToInt(walkable.y)].worldPosition;
+                    Gizmos.DrawSphere(worldPos, .25f);
+                }
             }
         }
     }
