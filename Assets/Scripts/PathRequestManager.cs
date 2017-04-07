@@ -18,9 +18,9 @@ public class PathRequestManager : MonoBehaviour {
         instance = this;
         pathfinding = GetComponent<Pathfinding>();
     }
-    public static void RequestPath(Node startNode, Node endNode, Action<Node[], bool> callback)
+    public static void RequestPath(Node startNode, Node endNode, int xDir, int yDir, Action<Node[], bool> callback)
     {
-        PathRequest newRequest = new PathRequest(startNode, endNode, callback);
+        PathRequest newRequest = new PathRequest(startNode, endNode, xDir, yDir, callback);
         instance.pathRequestQueue.Enqueue(newRequest);
         instance.TryProcessNext();
     }
@@ -31,7 +31,7 @@ public class PathRequestManager : MonoBehaviour {
         {
             currentPathRequest = pathRequestQueue.Dequeue();
             isProcessingPath = true;
-            pathfinding.StartFindPath(currentPathRequest.startNode, currentPathRequest.endNode);
+            pathfinding.StartFindPath(currentPathRequest.startNode, currentPathRequest.endNode, currentPathRequest.xDir, currentPathRequest.yDir);
         }
     }
 
@@ -46,11 +46,14 @@ public class PathRequestManager : MonoBehaviour {
         public Node startNode;
         public Node endNode;
         public Action<Node[], bool> callback;
-
-        public PathRequest(Node _startNode, Node _endNode, Action<Node[], bool> _callback)
+        public int xDir;
+        public int yDir;
+        public PathRequest(Node _startNode, Node _endNode, int _xDir, int _yDir, Action<Node[], bool> _callback)
         {
             startNode = _startNode;
             endNode = _endNode;
+            xDir = _xDir;
+            yDir = _yDir;
             callback = _callback;
         }
     }

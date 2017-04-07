@@ -12,6 +12,6 @@ public class EnemyUnitController : UnitController {
         base.BeginTurn();
         Vector2 targetIndex = walkables[rnjesus.Next(0,walkables.Count-1)];
         Node targetNode = Utilities.NodeFromGridIndex(targetIndex);
-        PathRequestManager.RequestPath(nodeLocation, targetNode, OnPathFound);
+        PathRequestManager.RequestPath(nodeLocation, targetNode, xDir, yDir, OnPathFound);
     }
 }

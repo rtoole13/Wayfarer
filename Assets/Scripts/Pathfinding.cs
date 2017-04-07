@@ -14,14 +14,16 @@ public class Pathfinding : MonoBehaviour {
         boardController = GetComponent<BoardController>();
     }
 
-    public void StartFindPath(Node startNode, Node targetNode)
+    public void StartFindPath(Node startNode, Node targetNode, int xDir, int yDir)
     {
-        StartCoroutine(FindPath(startNode, targetNode));
+        StartCoroutine(FindPath(startNode, targetNode, xDir, yDir));
     }
-    IEnumerator FindPath(Node startNode, Node targetNode)
+    IEnumerator FindPath(Node startNode, Node targetNode, int _xDir, int _yDir)
     {
         Node[] waypoints = new Node[0];
         bool pathSuccess = false;
+        int xDir = _xDir;
+        int yDir = _yDir;
 
         if (startNode.walkable && targetNode.walkable)
         {
@@ -33,10 +35,16 @@ public class Pathfinding : MonoBehaviour {
             while (openSet.Count > 0)
             {
                 Node currentNode = openSet[0];
+                
                 for (int i = 1; i < openSet.Count; i++)
                 {
                     if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
                     {
+                        /*
+                        Vector2 newDir = GetDirection(currentNode, openSet[i]);
+                        xDir = Mathf.RoundToInt(newDir.x);
+                        yDir = Mathf.RoundToInt(newDir.y);
+                        */
                         currentNode = openSet[i];
                     }
                 }
@@ -57,7 +65,22 @@ public class Pathfinding : MonoBehaviour {
                     }
 
                     //All neighbors 1 away
-                    int movementCostToNeighbor = currentNode.gCost + 1;
+                    Vector2 neighborDir = new Vector2();
+                    neighborDir = GetDirection(currentNode, neighbor);
+                    
+                    int movementCostToNeighbor = currentNode.gCost;
+                    if (xDir == Mathf.RoundToInt(neighborDir.x) && yDir == Mathf.RoundToInt(neighborDir.y))
+                    {
+                        movementCostToNeighbor += 1;
+                        Debug.Log("old dirX" + xDir + "old dirY" + yDir);
+                        Debug.Log(neighborDir);
+
+                    }
+                    else
+                    {
+                        movementCostToNeighbor += 3;
+                    }
+
                     if (movementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
                     {
                         neighbor.gCost = movementCostToNeighbor;
@@ -99,6 +122,13 @@ public class Pathfinding : MonoBehaviour {
         boardController.path = path;
         return waypoints;
     }
+
+    Vector2 GetDirection(Node currentNode, Node targetNode)
+    {
+        Vector2 directionNew = new Vector2(targetNode.cubeX - currentNode.cubeX, targetNode.cubeY - currentNode.cubeY);
+        return directionNew;
+    }
+
     Node[] SimplifyPath(List<Node> path)
     {
         List<Node> waypoints = new List<Node>();

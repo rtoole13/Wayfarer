@@ -35,7 +35,7 @@ public class HumanUnitController : UnitController {
             {
                 if(walkable.x == gridLocation.x && walkable.y == gridLocation.y)
                 {
-                    PathRequestManager.RequestPath(nodeLocation, mouseNode, OnPathFound);
+                    PathRequestManager.RequestPath(nodeLocation, mouseNode, xDir, yDir, OnPathFound);
                 }
             }
             
