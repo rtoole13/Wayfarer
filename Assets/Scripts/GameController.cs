@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 
     public static GameController instance = null;
 
-    public BoardController boardScript;
+    private BoardController boardScript;
 
     private PlayerController[] players;
     public int playerHealth = 100;
@@ -44,7 +44,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         //End Player turn
-        if (Input.GetKeyDown("e"))
+        if (Input.GetKeyDown("e") || HUDController.EndTurn)
         {
             if (!EndHumanTurn())
             {
